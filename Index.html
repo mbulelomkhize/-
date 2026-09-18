@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>a question</title>
+<style>
+  :root{
+    --cream:#FDF6EC;
+    --rose:#C9707B;
+    --rose-deep:#A85560;
+    --plum:#3B2635;
+    --butter:#F4DFA3;
+    --sage:#8FA789;
+    --line: rgba(59,38,53,0.12);
+  }
+
+  @font-face {
+    font-family: 'FredokaFallback';
+    src: local('Arial Rounded MT Bold');
+  }
+
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+
+  body{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:
+      radial-gradient(circle at 15% 20%, rgba(201,112,123,0.10), transparent 40%),
+      radial-gradient(circle at 85% 80%, rgba(143,167,137,0.12), transparent 45%),
+      var(--cream);
+    font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    color: var(--plum);
+    overflow-x:hidden;
+    padding: 24px 16px;
+  }
+
+  .stage{
+    position:relative;
+    width:100%;
+    max-width: 420px;
+    min-height: 560px;
+  }
+
+  .card{
+    position:relative;
+    background: #fffdf9;
+    border: 1.5px solid var(--line);
+    border-radius: 28px;
+    padding: 40px 30px 34px;
+    box-shadow: 0 2px 0 rgba(59,38,53,0.04), 0 18px 40px -22px rgba(59,38,53,0.35);
+    text-align:center;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+
+  .card.hidden{
+    position:absolute;
+    inset:0;
+    opacity:0;
+    transform: translateY(14px) scale(0.98);
+    pointer-events:none;
+  }
+
+  /* little washi-tape corner accents */
+  .card::before, .card::after{
+    content:'';
+    position:absolute;
+    width: 54px; height: 20px;
+    background: var(--butter);
+    opacity:0.85;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+  }
+  .card::before{
+    top:-10px; left:26px;
+    transform: rotate(-8deg);
+  }
+  .card::after{
+    top:-10px; right:26px;
+    transform: rotate(7deg);
+    background: var(--rose);
+    opacity:0.55;
+  }
+
+  .frame{
+    width: 168px;
+    height: 168px;
+    margin: 0 auto 22px;
+    border-radius: 20px;
+    overflow:hidden;
+    border: 3px solid #fff;
+    outline: 1.5px solid var(--line);
+    box-shadow: 0 10px 24px -14px rgba(59,38,53,0.4);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background: linear-gradient(160deg, var(--butter), #f6e9c0);
+    font-size: 64px;
+    transform: rotate(-2deg);
+  }
+
+  .frame img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+  }
+
+  h1{
+    font-size: 1.55rem;
+    line-height:1.3;
+    margin: 0 0 8px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .sub{
+    font-size: 0.92rem;
+    color: rgba(59,38,53,0.62);
+    margin: 0 0 26px;
+    line-height:1.5;
+  }
+
+  .btn-row{
+    position:relative;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap: 14px;
+    min-height: 54px;
+  }
+
+  button{
+    font-family:inherit;
+    font-size: 0.98rem;
+    font-weight: 600;
+    border:none;
+    border-radius: 999px;
+    padding: 13px 26px;
+    cursor:pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .yes{
+    background: var(--rose);
+    color: #fff;
+    box-shadow: 0 8px 18px -8px rgba(168,85,96,0.6);
+  }
+  .yes:hover{ transform: translateY(-2px); box-shadow: 0 12px 22px -8px rgba(168,85,96,0.65); }
+  .yes:active{ transform: translateY(0); }
+
+  .no{
+    background: #f1e9df;
+    color: var(--plum);
+    position:relative;
+    left:0; top:0;
+  }
+
+  #screen2 .frame{ background: linear-gradient(160deg, var(--sage), #cfe0cb); transform: rotate(2deg); }
+
+  .okay{
+    background: var(--plum);
+    color: #fff;
+    margin-top: 4px;
+    box-shadow: 0 8px 18px -8px rgba(59,38,53,0.5);
+  }
+  .okay:hover{ transform: translateY(-2px); }
+
+  .tiny{
+    margin-top: 18px;
+    font-size: 0.72rem;
+    color: rgba(59,38,53,0.35);
+    letter-spacing: 0.01em;
+  }
+
+  .emoji-burst{
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    overflow:visible;
+  }
+  .emoji-burst span{
+    position:absolute;
+    font-size: 22px;
+    opacity:0;
+    animation: pop 900ms ease forwards;
+  }
+  @keyframes pop{
+    0%{ opacity:0; transform: translateY(0) scale(0.6) rotate(0deg); }
+    15%{ opacity:1; }
+    100%{ opacity:0; transform: translateY(-90px) scale(1.1) rotate(20deg); }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .card, .yes, .okay, .no{ transition:none; }
+    .emoji-burst span{ animation:none; opacity:0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="stage">
+
+  <div class="card" id="screen1">
+    <div class="frame" id="photoFrame">🥶</div>
+    <h1>okay, quick question</h1>
+    <p class="sub">Ngingeza ngizogona? <br>no pressure, i already asked the cat for advice.</p>
+    <div class="btn-row" id="btnRow">
+      <button class="yes" id="yesBtn">yes 💛</button>
+      <button class="no" id="noBtn">no</button>
+    </div>
+    <p class="tiny">the "no" button is a little shy, fair warning</p>
+    <div class="emoji-burst" id="burst"></div>
+  </div>
+
+  <div class="card hidden" id="screen2">
+    <div class="frame">🎉</div>
+    <h1>wait, you actually said yes??</h1>
+    <p class="sub">i had a whole backup plan ready in case you said no. guess i don't need it.</p>
+    <button class="okay" id="okayBtn">Usheshe please→</button>
+  </div>
+
+</div>
+
+<script>
+  const screen1 = document.getElementById('screen1');
+  const screen2 = document.getElementById('screen2');
+  const noBtn = document.getElementById('noBtn');
+  const yesBtn = document.getElementById('yesBtn');
+  const okayBtn = document.getElementById('okayBtn');
+  const btnRow = document.getElementById('btnRow');
+  const burst = document.getElementById('burst');
+
+  // --- dodging "no" button ---
+  let dodgeCount = 0;
+  const dodgeLines = [
+    "no", "wait really?", "are you sure?", "think again", "last chance",
+    "hm, no.", "nope, try yes", "c'mon", "khetha u yes, no", "😳"
+  ];
+
+  function dodge(){
+    const rowRect = btnRow.getBoundingClientRect();
+    const btnRect = noBtn.getBoundingClientRect();
+    const maxX = rowRect.width - btnRect.width - 8;
+    const maxY = 40;
+
+    if (noBtn.style.position !== 'absolute'){
+      noBtn.style.position = 'absolute';
+      noBtn.style.left = (btnRect.left - rowRect.left) + 'px';
+      noBtn.style.top = (btnRect.top - rowRect.top) + 'px';
+    }
+
+    const newX = Math.random() * Math.max(maxX, 0);
+    const newY = (Math.random() * maxY) - (maxY/2);
+
+    noBtn.style.left = Math.max(0, Math.min(newX, maxX)) + 'px';
+    noBtn.style.top = newY + 'px';
+
+    dodgeCount++;
+    if (dodgeCount <= dodgeLines.length){
+      noBtn.textContent = dodgeLines[dodgeCount - 1];
+    }
+  }
+
+  noBtn.addEventListener('mouseenter', dodge);
+  noBtn.addEventListener('touchstart', function(e){ e.preventDefault(); dodge(); }, {passive:false});
+  noBtn.addEventListener('click', function(e){ e.preventDefault(); dodge(); });
+
+  // --- yes button ---
+  function spawnEmoji(){
+    const emojis = ['💛','✨','🎉','💫','🌸'];
+    for (let i=0;i<6;i++){
+      const s = document.createElement('span');
+      s.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+      s.style.left = (30 + Math.random()*40) + '%';
+      s.style.bottom = '30%';
+      s.style.animationDelay = (i*70) + 'ms';
+      burst.appendChild(s);
+      setTimeout(()=> s.remove(), 1000 + i*70);
+    }
+  }
+
+  yesBtn.addEventListener('click', function(){
+    spawnEmoji();
+    setTimeout(()=>{
+      screen1.classList.add('hidden');
+      screen2.classList.remove('hidden');
+    }, 350);
+  });
+
+  okayBtn.addEventListener('click', function(){
+    okayBtn.textContent = "that's the whole page 😄";
+    okayBtn.disabled = true;
+    okayBtn.style.opacity = '0.7';
+    okayBtn.style.cursor = 'default';
+  });
+</script>
+
+</body>
+</html>
